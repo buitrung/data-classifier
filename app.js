@@ -35,6 +35,7 @@ const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 const classifierController = require('./controllers/classifier');
+const adminController = require('./controllers/admin');
 
 /**
  * API keys and Passport configuration.
@@ -149,6 +150,7 @@ app.post('/account/password', passportConfig.isAuthenticated, userController.pos
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 app.get('/classifier/:page_number?', classifierController.renderClassifierPage);
+app.get('/admin', adminController.renderAdminPage);
 
 /**
  * API examples routes.
