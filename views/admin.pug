@@ -1,0 +1,54 @@
+extends layout
+
+block content
+  h3 Users
+  table.table
+    thead
+      tr
+        th.text-right(width=40) #
+        th Email
+        th Post IDs
+        th.text-right(width=130) Assigned Posts
+        th.text-center Progress
+        th.text-right(width=160) Labelled Comments
+        th.text-right(width=80) Positive
+        th.text-right(width=80) Neutral
+        th.text-right(width=80) Negative
+    tbody
+      each user, idx in users
+        - const labelled_comments = user.comments_cnt.positive + user.comments_cnt.neutral + user.comments_cnt.negative
+        - const progress = Math.round(labelled_comments / user.comments_cnt.all * 100)
+        tr
+          td.text-right= idx+1
+          td= user.email
+          td #{user.assigned_post_ids[0]} &rarr; #{user.assigned_post_ids[user.assigned_post_ids.length - 1]}
+          td.text-right= user.assigned_post_ids.length
+          td
+            .progress
+              .progress-bar(style=`width: ${progress}%`)
+          td.text-right
+            strong #{labelled_comments}
+            |  / #{user.comments_cnt.all} (#{progress}%)
+          td.text-right= user.comments_cnt.positive
+          td.text-right= user.comments_cnt.neutral
+          td.text-right= user.comments_cnt.negative
+    tfoot
+      - const all_labelled_comments = all_comments_cnt.positive + all_comments_cnt.neutral + all_comments_cnt.negative
+      - const all_progress = parseFloat((all_labelled_comments / all_comments_cnt.all * 100).toFixed(2))
+      tr
+        td.text-right(colspan=3)
+          strong Total
+        td.text-right= all_assigned_post_ids.length
+        td.text-right
+          .progress
+            .progress-bar(style=`width: ${all_progress}%`)
+        td.text-right
+          strong #{all_labelled_comments}
+          |  / #{all_comments_cnt.all} (#{all_progress}%)
+        td.text-right= all_comments_cnt.positive
+        td.text-right= all_comments_cnt.neutral
+        td.text-right= all_comments_cnt.negative
+
+  h5 Assigned Posts: #{all_assigned_post_ids.length} / #{all_posts.length}
+
+  h5 Assigned Comments: #{all_assigned_comments.length} / #{all_comments_cnt.all}
