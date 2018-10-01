@@ -124,6 +124,11 @@ app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/jquery/dist
 app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawesome/fontawesome-free/webfonts'), { maxAge: 31557600000 }));
 
 /**
+ * Define app consts.
+ */
+app.locals.sentiment = require('./const/enum').sentiment;
+
+/**
  * Primary app routes.
  */
 app.get('/', homeController.index);
@@ -177,6 +182,8 @@ app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
 app.get('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getPinterest);
 app.post('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.postPinterest);
 app.get('/api/google-maps', apiController.getGoogleMaps);
+
+app.put('/api/comments/:comment_id', classifierController.updateCommentPositiveness);
 
 /**
  * OAuth authentication routes. (Sign in)
