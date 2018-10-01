@@ -2,6 +2,8 @@ const Comment = require('../models/Comment');
 const Post = require('../models/Post');
 const User = require('../models/Member');
 
+const sentiment = require('../const/enum').sentiment;
+
 /**
  * GET /
  * Classifier page.
@@ -52,10 +54,31 @@ exports.renderClassifierPage = async (req, res, next) => {
       post_id: { $in: user.assigned_post_ids }
     }).exec();
 
+    const comments_cnt = all_comments.reduce(
+      (result, comment) => {
+        if (comment.positiveness === sentiment.positive) {
+          result.positive++;
+        } else if (comment.positiveness === sentiment.neutral) {
+          result.neutral++;
+        } else if (comment.positiveness === sentiment.negative) {
+          result.negative++;
+        }
+        result.all++;
+        return result;
+      },
+      {
+        positive: 0,
+        neutral: 0,
+        negative: 0,
+        all: 0
+      }
+    );
+
     res.render('classifier', {
       title: 'Classifier',
       post,
       comments,
+      comments_cnt,
       page_number,
       posts_count
     });

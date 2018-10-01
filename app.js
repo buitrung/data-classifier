@@ -124,6 +124,11 @@ app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/jquery/dist
 app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawesome/fontawesome-free/webfonts'), { maxAge: 31557600000 }));
 
 /**
+ * Define app consts.
+ */
+app.locals.sentiment = require('./const/enum').sentiment;
+
+/**
  * Primary app routes.
  */
 app.get('/', homeController.index);
