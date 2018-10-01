@@ -1,0 +1,29 @@
+.text-center
+    br
+    .d-inline-block
+      ul.pagination
+        - if (page_number > 1) {
+          li.page-item
+            a.page-link(href=`/classifier/${page_number - 1}`) &lt;
+        - }
+        - for (let i = 1; i <= posts_count; i++) {
+          - if ((page_number - 6 < i && i < page_number + 6) || i == 1 || i == posts_count) {
+            - if (i == page_number) {
+              li.page-item.active
+                span.page-link= i
+            - } else {
+              li.page-item
+                a.page-link(href=`/classifier/${i}`)= i
+            - }
+          - } else if (i % 10 === 0) {
+            li.page-item
+              a.page-link(href=`/classifier/${i}`)= i
+          - } else if (i == page_number - 6 || i == page_number + 6) {
+            li.page-item
+              span.page-link &hellip;
+          - }
+        - }
+        - if (page_number < posts_count) {
+          li.page-item
+            a.page-link(href=`/classifier/${page_number + 1}`) &gt;
+        - }

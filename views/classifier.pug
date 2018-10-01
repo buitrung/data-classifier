@@ -1,0 +1,55 @@
+extends layout
+
+block content
+  h3
+    span.text-muted Post title:&nbsp;
+    strong= post.title
+
+  include partials/pagination
+
+  ul.list-group
+    for comment in comments
+      li.list-group-item
+        .row
+          .col-md-9
+            div !{comment.body}
+          .col-md-3
+            .btn-group.float-right
+              .btn.btn-sm.btn-outline-success(data-comment-id=comment._id, data-point=2) Positive
+              .btn.btn-sm.btn-outline-secondary(data-comment-id=comment._id, data-point=1) Neutral
+              .btn.btn-sm.btn-outline-danger(data-comment-id=comment._id, data-point=0) Negative
+
+  include partials/pagination
+
+  script.
+    const comment_ids = [#{comments.map(comment => comment._id)}];
+
+    $('body').on('click', '[data-comment-id]', function() {
+      const comment_id = $(this).attr('data-comment-id');
+      const positiveness = $(this).attr('data-point');
+      const self = $(this);
+
+      $.ajax({
+        url: `/api/comments/${comment_id}`,
+        type: 'PUT',
+        data: {
+          positiveness,
+          comment_ids
+        },
+        success: function(data) {
+          if (positiveness == 0) {
+            self.removeClass('btn-outline-danger').addClass('btn-danger');
+            self.siblings('[data-point=1]').removeClass('btn-secondary').addClass('btn-outline-secondary');
+            self.siblings('[data-point=2]').removeClass('btn-success').addClass('btn-outline-success');
+          } else if (positiveness == 1) {
+            self.removeClass('btn-outline-secondary').addClass('btn-secondary');
+            self.siblings('[data-point=0]').removeClass('btn-danger').addClass('btn-outline-danger');
+            self.siblings('[data-point=2]').removeClass('btn-success').addClass('btn-outline-success');
+          } else if (positiveness == 2) {
+            self.removeClass('btn-outline-success').addClass('btn-success');
+            self.siblings('[data-point=0]').removeClass('btn-danger').addClass('btn-outline-danger');
+            self.siblings('[data-point=1]').removeClass('btn-secondary').addClass('btn-outline-secondary');
+          }
+        }
+      });
+    });
