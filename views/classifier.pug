@@ -5,6 +5,8 @@ block content
     span.text-muted Post title:&nbsp;
     strong= post.title
 
+  include partials/pagination
+
   ul.list-group
     for comment in comments
       li.list-group-item
@@ -16,6 +18,8 @@ block content
               .btn.btn-sm.btn-outline-success(data-comment-id=comment._id, data-point=2) Positive
               .btn.btn-sm.btn-outline-secondary(data-comment-id=comment._id, data-point=1) Neutral
               .btn.btn-sm.btn-outline-danger(data-comment-id=comment._id, data-point=0) Negative
+
+  include partials/pagination
 
   script.
     const comment_ids = [#{comments.map(comment => comment._id)}];
