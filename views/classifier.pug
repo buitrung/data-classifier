@@ -64,15 +64,15 @@ block content
           comment_ids
         },
         success: function(data) {
-          if (positiveness == sentiment.negative) {
+          if (positiveness == #{sentiment.negative}) {
             self.removeClass('btn-outline-danger').addClass('btn-danger');
             self.siblings('[data-point=1]').removeClass('btn-secondary').addClass('btn-outline-secondary');
             self.siblings('[data-point=2]').removeClass('btn-success').addClass('btn-outline-success');
-          } else if (positiveness == sentiment.neutral) {
+          } else if (positiveness == #{sentiment.neutral}) {
             self.removeClass('btn-outline-secondary').addClass('btn-secondary');
             self.siblings('[data-point=0]').removeClass('btn-danger').addClass('btn-outline-danger');
             self.siblings('[data-point=2]').removeClass('btn-success').addClass('btn-outline-success');
-          } else if (positiveness == sentiment.positive) {
+          } else if (positiveness == #{sentiment.positive}) {
             self.removeClass('btn-outline-success').addClass('btn-success');
             self.siblings('[data-point=0]').removeClass('btn-danger').addClass('btn-outline-danger');
             self.siblings('[data-point=1]').removeClass('btn-secondary').addClass('btn-outline-secondary');

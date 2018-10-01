@@ -183,6 +183,8 @@ app.get('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAutho
 app.post('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.postPinterest);
 app.get('/api/google-maps', apiController.getGoogleMaps);
 
+app.put('/api/comments/:comment_id', classifierController.updateCommentPositiveness);
+
 /**
  * OAuth authentication routes. (Sign in)
  */

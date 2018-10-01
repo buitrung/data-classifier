@@ -86,3 +86,46 @@ exports.renderClassifierPage = async (req, res, next) => {
     return next(err);
   }
 };
+
+/**
+ * POST /
+ * Classify a Coment
+ */
+exports.updateCommentPositiveness = async (req, res, next) => {
+  const comment_id = req.params.comment_id;
+  const comment_ids = req.body.comment_ids;
+  const positiveness = req.body.positiveness;
+
+  try {
+    await Comment.findByIdAndUpdate(comment_id, {
+      positiveness
+    }).exec();
+
+    const all_comments = await Comment.find({
+      _id: { $in: comment_ids }
+    }).exec();
+
+    let is_comments_classified = true;
+    for (const comment of all_comments) {
+      if (comment.positiveness == null || comment.positiveness == undefined) {
+        is_comments_classified = false;
+        break;
+      }
+    }
+
+    if (is_comments_classified) {
+      const post_id = all_comments[0].post_id;
+      await Post.findByIdAndUpdate(post_id, {
+        is_comments_classified
+      }).exec();
+    }
+
+    res.json({
+      comment_id,
+      positiveness,
+      message: 'Success'
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
