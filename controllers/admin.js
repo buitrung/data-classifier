@@ -37,6 +37,17 @@ exports.renderAdminPage = async (req, res, next) => {
       all_post_ids.push(post._id);
     });
 
+    let all_comments_cnt = {
+      positive: 0,
+      neutral: 0,
+      negative: 0,
+      all: 0
+    };
+
+    all_comments_cnt.all = await Comment.find({
+      post_id: { $in: all_post_ids }
+    }).count().exec();
+
     const all_assigned_comments = await Comment.find({
       post_id: { $in: all_assigned_post_ids }
     }).exec();
@@ -63,11 +74,16 @@ exports.renderAdminPage = async (req, res, next) => {
         }
         user.comments_cnt.all++;
       });
+
+      all_comments_cnt.positive += user.comments_cnt.positive;
+      all_comments_cnt.neutral += user.comments_cnt.neutral;
+      all_comments_cnt.negative += user.comments_cnt.negative;
     }
 
     res.render('admin', {
       title: 'Admin',
       users,
+      all_comments_cnt,
       all_assigned_post_ids,
       all_posts,
       all_assigned_comments

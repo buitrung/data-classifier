@@ -32,3 +32,23 @@ block content
           td.text-right= user.comments_cnt.positive
           td.text-right= user.comments_cnt.neutral
           td.text-right= user.comments_cnt.negative
+    tfoot
+      - const all_labelled_comments = all_comments_cnt.positive + all_comments_cnt.neutral + all_comments_cnt.negative
+      - const all_progress = parseFloat((all_labelled_comments / all_comments_cnt.all * 100).toFixed(2))
+      tr
+        td.text-right(colspan=3)
+          strong Total
+        td.text-right= all_assigned_post_ids.length
+        td.text-right
+          .progress
+            .progress-bar(style=`width: ${all_progress}%`)
+        td.text-right
+          strong #{all_labelled_comments}
+          |  / #{all_comments_cnt.all} (#{all_progress}%)
+        td.text-right= all_comments_cnt.positive
+        td.text-right= all_comments_cnt.neutral
+        td.text-right= all_comments_cnt.negative
+
+  h5 Assigned Posts: #{all_assigned_post_ids.length} / #{all_posts.length}
+
+  h5 Assigned Comments: #{all_assigned_comments.length} / #{all_comments_cnt.all}
